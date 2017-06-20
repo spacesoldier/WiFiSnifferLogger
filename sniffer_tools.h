@@ -4,6 +4,7 @@
 #include "packet_structs.h"
 #include "wifi_entities.h"
 #include <os_type.h>
+#include "sniffer_logger.h"
 
 extern "C" {
   #include <user_interface.h>
@@ -22,5 +23,9 @@ void getMAC(char *addr, uint8_t* data, uint16_t offset);
 void channelHop();
 
 void ICACHE_FLASH_ATTR promisc_cb(uint8_t *buf, uint16_t len); //Alternative callback for promiscuous mode
+
+static bool fullscan_done = false;
+bool scanDone();
+void askScan();
 
 #endif

@@ -64,7 +64,8 @@ void print_beacon(beaconinfo beacon)
     //Serial.printf("BEACON ERR: (%d)  ", beacon.err);
   } else {
     Serial.printf("BEACON: <=============== [%32s]  ", beacon.ssid);
-    for (int i = 0; i < 6; i++) Serial.printf("%02x", beacon.bssid[i]);
+    for (int i = 0; i < 5; i++) Serial.printf("%02x:", beacon.bssid[i]);
+    Serial.printf("%02x", beacon.bssid[5]);
     Serial.printf("   %2d", beacon.channel);
     Serial.printf("   %4d\r\n", beacon.rssi);
   }
@@ -78,7 +79,8 @@ void print_client(clientinfo ci)
     // nothing
   } else {
     Serial.printf("DEVICE: ");
-    for (int i = 0; i < 6; i++) Serial.printf("%02x", ci.station[i]);
+    for (int i = 0; i < 5; i++) Serial.printf("%02x:", ci.station[i]);
+    Serial.printf("%02x", ci.station[5]);
     Serial.printf(" ==> ");
 
     for (u = 0; u < aps_known_count; u++)
@@ -95,7 +97,8 @@ void print_client(clientinfo ci)
       //  for (int i = 0; i < 6; i++) Serial.printf("%02x", ci.bssid[i]);
     } else {
       Serial.printf("%2s", " ");
-      for (int i = 0; i < 6; i++) Serial.printf("%02x", ci.ap[i]);
+      for (int i = 0; i < 5; i++) Serial.printf("%02x:", ci.ap[i]);
+      Serial.printf("%02x", ci.ap[5]);
       Serial.printf("  %3d", aps_known[u].channel);
       Serial.printf("   %4d\r\n", ci.rssi);
     }

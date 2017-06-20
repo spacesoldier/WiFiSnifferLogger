@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="bootstrap.min.css">
+
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-brand">Wi-Fi Sniffer</div>
+	</div>
+</nav>
+
+<div class="container" style="padding-top:70px;">
+	<div class="row">
+		<div class="col-xs-12 panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Beacons (Wi-Fi networks)</h3>
+			</div>
+			<div class="panel-body">
+				<ul class="list-group" id="beaconslist">
+					<li class="list-group-item">some network<span class="badge">00:00:00:00:00:00</span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Clients (Wi-Fi devices)</h3>
+			</div>
+			<div class="panel-body">
+				<ul class="list-group" id="clientslist">
+					<li class="list-group-item">some device<span class="badge">00:00:00:00:00:00</span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="jquery-3.2.1.min.js"></script>
+<script src="bootstrap.min.js"></script>
+<script type="text/javascript">
+
+	var beaconSocket = new WebSocket("ws://192.168.88.247/ws/beacons");
+	
+	beaconSocket.onopen = function(event){
+		$("#beaconslist").html("_wait_");
+	}
+	
+	beaconSocket.onmessage = function (event) {
+		var data = JSON.parse(event.data);
+		var list = $("#beaconslist").html();
+		var newItem = "<li>"+data.name+"<span>"+data.mac+"</spam>"+"</li>";
+		$("#beaconslist").html(list+newItem);
+	}
+	
+	var clientsSocket = new WebSocket("ws://192.168.88.247/ws/clients");
+	
+	clientsSocket.onopen = function(event){
+		$("#clientslist").html("_wait_");
+	}
+	
+	clientsSocket.onmessage = function (event) {
+		var data = JSON.parse(event.data);
+		var list = $("#clientslist").html();
+		var newItem = "<li>"+data.name+"<span>"+data.mac+"</spam>"+"</li>";
+		$("#clientslist").html(list+newItem);
+	}
+
+	$(document).ready(function(){
+		beaconSocket.send(JSON.stringify({request: "list_all"}));
+		clientsSocket.send(JSON.stringify({request: "list_all"}));
+	});
+
+
+</script>
+</body>
+</html>
